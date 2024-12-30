@@ -49,3 +49,14 @@ class Accounts(Base):
     amount: Mapped[int] = mapped_column(DECIMAL(12, 2), default=0)
 
 
+class Categories(Base):
+    """Table for categories"""
+
+    __tablename__ = 'categories'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(50))
+    type: Mapped[str] = mapped_column(String(50))
+
+
+
