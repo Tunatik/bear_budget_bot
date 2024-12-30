@@ -39,4 +39,13 @@ class Transactions(Base):
     amount: Mapped[int] = mapped_column(DECIMAL(12, 2), default=0)
 
 
+class Accounts(Base):
+    """Table for accounts"""
+
+    __tablename__ = 'accounts'
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(50))
+    amount: Mapped[int] = mapped_column(DECIMAL(12, 2), default=0)
+
 
