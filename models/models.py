@@ -1,7 +1,9 @@
+import datetime
 from os import getenv
+from typing import Annotated
 
 from sqlalchemy.orm import DeclarativeBase, Mapped, relationship, Session, mapped_column
-from sqlalchemy import String, Integer, BigInteger, DECIMAL, ForeignKey, DATE
+from sqlalchemy import String, Integer, BigInteger, DECIMAL, ForeignKey, DATE, text
 from sqlalchemy import create_engine
 from dotenv import load_dotenv
 
@@ -12,7 +14,14 @@ DB_PASSWORD = getenv('DB_PASSWORD')
 DB_ADDRESS = getenv('DB_ADDRESS')
 DB_NAME = getenv('DB_NAME')
 
-engine = create_engine(f'sqlite:///bear_budget_db.db')
+engine = create_engine(f'sqlite:///./bear_budget_db.db', echo=True)
+
+intpk = Annotated[int, mapped_column(primary_key=True)]
+created_at = Annotated[datetime.datetime, mapped_column(server_default=text("TIMEZONE('utc', now())"))]
+updated_at = Annotated[datetime.datetime, mapped_column(
+    server_default=text("TIMEZONE('utc', now())"),
+    onupdate=datetime.datetime.now(datetime.UTC),
+    )]
 
 
 class Base(DeclarativeBase):
@@ -24,8 +33,8 @@ class Users(Base):
 
     __tablename__ = 'users'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(128))
+    id: Mapped[intpk]
+    full_name: Mapped[str] = mapped_column(String(128))
     telegram_id: Mapped[int] = mapped_column(BigInteger, unique=True)
 
 
@@ -34,7 +43,7 @@ class Transactions(Base):
 
     __tablename__ = 'transactions'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[intpk]
     type: Mapped[str] = mapped_column(String(20))
     amount: Mapped[int] = mapped_column(DECIMAL(12, 2), default=0)
 
@@ -44,7 +53,7 @@ class Accounts(Base):
 
     __tablename__ = 'accounts'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[intpk]
     name: Mapped[str] = mapped_column(String(50))
     amount: Mapped[int] = mapped_column(DECIMAL(12, 2), default=0)
 
@@ -54,9 +63,7 @@ class Categories(Base):
 
     __tablename__ = 'categories'
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[intpk]
     name: Mapped[str] = mapped_column(String(50))
     type: Mapped[str] = mapped_column(String(50))
-
-
 
