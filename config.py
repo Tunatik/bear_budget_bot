@@ -1,5 +1,6 @@
 import os
 
+from typing import List
 from loguru import logger
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
@@ -12,6 +13,7 @@ class Settings(BaseSettings):
     """Project settings"""
 
     BOT_TOKEN: str
+    USERS: List[int]
     FORMAT_LOG: str = "{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}"
     LOG_ROTATION: str = '10 MB'
     DB_URL: str = "sqlite+aiosqlite:///db.sqlite3"
