@@ -9,9 +9,9 @@ class User(Base):
 
     telegram_id: Mapped[int] = mapped_column(BigInteger, unique=True)
     username: Mapped[str]
-    accounts: Mapped['Account'] = relationship(back_populates='user', cascade='all, delete-orphan')
-    transactions: Mapped['Transaction'] = relationship(back_populates='user', cascade='all, delete-orphan')
-    categories: Mapped['Category'] = relationship(back_populates='user', cascade='all, delete-orphan')
+    accounts: Mapped[List['Account']] = relationship(back_populates='user', cascade='all, delete-orphan')
+    transactions: Mapped[List['Transaction']] = relationship(back_populates='user', cascade='all, delete-orphan')
+    categories: Mapped[List['Category']] = relationship(back_populates='user', cascade='all, delete-orphan')
 
 
 class Account(Base):
@@ -29,15 +29,15 @@ class Category(Base):
     type: Mapped[str]
     user: Mapped['User'] = relationship(back_populates='categories')
     user_telegram_id: Mapped[int] = mapped_column(ForeignKey('users.telegram_id'))
-    transactions: Mapped['Transaction'] = relationship(back_populates='category')
+    transactions: Mapped[List['Transaction']] = relationship(back_populates='category')
 
 
 class Transaction(Base):
 
     amount: Mapped[float] = mapped_column(DECIMAL(12, 2))
-    category: Mapped['Category'] = relationship(back_populates='categories')
+    category: Mapped['Category'] = relationship(back_populates='transactions')
     category_type: Mapped[str] = mapped_column(ForeignKey('categories.type'))
-    user: Mapped['User'] = relationship(back_populates='transaction')
+    user: Mapped['User'] = relationship(back_populates='transactions')
     user_telegram_id: Mapped[int] = mapped_column(ForeignKey('users.telegram_id'))
 
 
