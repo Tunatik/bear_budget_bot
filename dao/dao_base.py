@@ -31,6 +31,23 @@ class BaseDAO:
             raise
 
     @classmethod
+    async def find_all(cls, session: AsyncSession, filters: BaseModel | None = None):
+        """Find all records by optional filters"""
+
+        filters_dict = filters.model_dump(exclude_unset=True) if filters else {}
+        logger.info(f'Search for the all entry\'s {cls.model.__name__} by filters {filters_dict}')
+
+        try:
+            query = select(cls.model).filter_by(**filters_dict)
+            result = await session.execute(query)
+            records = result.scalars().all()
+            logger.info(f'Found {len(records)} records')
+            return records
+        except SQLAlchemyError as e:
+            logger.error(f'Error while searching for a records: {e}')
+            raise
+
+    @classmethod
     async def add(cls, session: AsyncSession, values: BaseModel):
         """Add one record"""
         values_dict = values.model_dump()

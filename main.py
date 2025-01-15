@@ -10,6 +10,7 @@ from handlers.handlers import user_router
 async def set_commands():
     commands = [
         BotCommand(command='start', description='start'),
+        BotCommand(command='help', description='help'),
     ]
 
     await bot.set_my_commands(commands)
