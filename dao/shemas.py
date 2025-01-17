@@ -10,6 +10,17 @@ class UserModel(TelegramIDModel):
 
 
 class CategoryModel(BaseModel):
+    name: str | None
+    type: str | None
+    telegram_id: int | None
+
+
+class CategoryIDModel(BaseModel):
+    id: int
+
+
+class CategoryNameModel(BaseModel):
     name: str
+
+class CategoryTypeModel(BaseModel):
     type: str
-    user_telegram_id: int

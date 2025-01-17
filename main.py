@@ -5,6 +5,7 @@ from loguru import logger
 from config import bot, dp
 from middleware.database_connection import DatabaseMiddlewareWithCommit, DatabaseMiddlewareWithoutCommit
 from handlers.handlers import user_router
+from handlers.settings_handlers import settings_router
 
 
 async def set_commands():
@@ -29,7 +30,7 @@ async def main():
     dp.update.middleware(DatabaseMiddlewareWithCommit())
     dp.update.middleware(DatabaseMiddlewareWithoutCommit())
 
-    dp.include_router(user_router)
+    dp.include_routers(user_router, settings_router)
 
     dp.startup.register(start_bot)
     dp.shutdown.register(stop_bot)

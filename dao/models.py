@@ -19,7 +19,7 @@ class Account(Base):
     name: Mapped[str]
     amount: Mapped[int] = mapped_column(default=0)
     user: Mapped['User'] = relationship(back_populates='accounts')
-    user_telegram_id: Mapped[int] = mapped_column(ForeignKey('users.telegram_id'))
+    telegram_id: Mapped[int] = mapped_column(ForeignKey('users.telegram_id'))
 
 
 class Category(Base):
@@ -28,7 +28,7 @@ class Category(Base):
     name: Mapped[str]
     type: Mapped[str]
     user: Mapped['User'] = relationship(back_populates='categories')
-    user_telegram_id: Mapped[int] = mapped_column(ForeignKey('users.telegram_id'))
+    telegram_id: Mapped[int] = mapped_column(ForeignKey('users.telegram_id'))
     transactions: Mapped[List['Transaction']] = relationship(back_populates='category')
 
 
@@ -38,7 +38,7 @@ class Transaction(Base):
     category: Mapped['Category'] = relationship(back_populates='transactions')
     category_type: Mapped[str] = mapped_column(ForeignKey('categories.type'))
     user: Mapped['User'] = relationship(back_populates='transactions')
-    user_telegram_id: Mapped[int] = mapped_column(ForeignKey('users.telegram_id'))
+    telegram_id: Mapped[int] = mapped_column(ForeignKey('users.telegram_id'))
 
 
 

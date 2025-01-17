@@ -63,3 +63,36 @@ class BaseDAO:
             await session.rollback()
             logger.error(f'Error while adding record: {e}')
             raise e
+
+    @classmethod
+    async def update(cls, session: AsyncSession, values: BaseModel, id: int):
+        """Update one record"""
+
+        values_dict = values.model_dump()
+        logger.info(f'Updating record {cls.model.__name__} with values {values_dict}')
+
+
+        query = update(cls.model).filter(cls.model.id == id).values(**values_dict)
+        await session.execute(query)
+
+        try:
+            await session.flush()
+            logger.info('Record successfully updated')
+        except SQLAlchemyError as e:
+            await session.rollback()
+            logger.error(f'Error while updating record: {e}')
+            raise e
+
+    @classmethod
+    async def delete(cls, session: AsyncSession, id: int):
+        """Delete one record"""
+        query = delete(cls.model).filter(cls.model.id == id)
+        await session.execute(query)
+
+        try:
+            await session.flush()
+            logger.info('Record successfully deleted')
+        except SQLAlchemyError as e:
+            await session.rollback()
+            logger.error(f'Error while deleting record: {e}')
+            raise e
